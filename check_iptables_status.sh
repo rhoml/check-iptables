@@ -96,24 +96,25 @@ fi
 
 CHKIPTBLS="`/sbin/iptables -n -t $table -L |wc -l`"
 
-if [ "$CHKIPTBLS" == 0 ]; then
-	TOTRULES=$CHKIPTBLS
+if [ "$CHKIPTBLS" == 0 ]
+then
+	TOTRULES="$CHKIPTBLS"
 else
 	TOTRULES=$[$CHKIPTBLS-8]
 fi
 
 
-if [ "$TOTRULES" -ge "$minrules" ]; then
-                    echo "OK - Iptables are OK The Table $table has $TOTRULES rules configured"
-                    # Nagios exit code 0 = status OK = green
-                    exit 0
+if [ "$TOTRULES" -ge "$minrules" ]
+then
+	echo "OK - Iptables are OK The Table $table has $TOTRULES rules configured"
+	# Nagios exit code 0 = status OK = green
+	exit 0
 else
-                    echo " CRITICAL - Iptables are CRITICAL The Table $table has $TOTRULES rules configured"
-					for i in `w  -h | cut -f1 -d" " | sort | uniq`
-					do
-							
-						echo "`date '+%d/%m/%Y - %H:%M:%S'` - CRITICAL - $i is logged in and there are only $TOTRULES loaded" >> $LOG
-					done
-                    # Nagios exit code 2 = status CRITICAL = red
-                	exit 2                
+	echo " CRITICAL - Iptables are CRITICAL The Table $table has $TOTRULES rules configured"
+	for i in `w -h | cut -f1 -d" " | sort | uniq`
+	do
+		echo "`date '+%d/%m/%Y - %H:%M:%S'` - CRITICAL - $i is logged in and there are only $TOTRULES loaded" >> "$LOG"
+	done
+	# Nagios exit code 2 = status CRITICAL = red
+	exit 2
 fi
