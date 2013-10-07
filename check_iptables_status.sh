@@ -43,7 +43,6 @@
 # 	Initialization
 #----------------------------------------------------------------------------------------------------------
 LOG=/var/log/iptables/iptables.log
-CHKIPTBLS=`/sbin/iptables -n -t filter -L |wc -l`
 
 function usage()
 {
@@ -95,7 +94,7 @@ fi
 #	DO NOT MODIFY ANYTHING BELOW THIS
 ##
 
-$CHKIPTBLS >/dev/null 2>/dev/null
+CHKIPTBLS="`/sbin/iptables -n -t $table -L |wc -l`"
 
 if [ "$CHKIPTBLS" == 0 ]; then
 	TOTRULES=$CHKIPTBLS
@@ -105,11 +104,11 @@ fi
 
 
 if [ "$TOTRULES" -ge "$minrules" ]; then
-                    echo "OK - Iptables are OK The Table $table and Chain $CHAIN has $TOTRULES rules configured"
+                    echo "OK - Iptables are OK The Table $table has $TOTRULES rules configured"
                     # Nagios exit code 0 = status OK = green
                     exit 0
 else
-                    echo " CRITICAL - Iptables are CRITICAL The Table $table and Chain $CHAIN has $TOTRULES rules configured"
+                    echo " CRITICAL - Iptables are CRITICAL The Table $table has $TOTRULES rules configured"
 					for i in `w  -h | cut -f1 -d" " | sort | uniq`
 					do
 							
