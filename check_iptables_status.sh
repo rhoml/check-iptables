@@ -49,9 +49,8 @@ function usage()
 	cat <<EOF
 $0 -T <table> -r <min rules>
 	<min rules>	Minimun quantity of rules.
-	<table>		Table to check.  Currently available:
+	<table>		Table to check.
 EOF
-	sed 's%^%\t\t%' /proc/net/ip_tables_names
 	echo
 }
 
